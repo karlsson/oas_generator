@@ -1,3 +1,4 @@
 export function merge(params) {
-  return Object.assign({}, ...params)
+  let params1 = params.toArray()
+  return Object.assign({}, ...params1)
 }
