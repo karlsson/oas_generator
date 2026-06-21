@@ -3,6 +3,7 @@ import gleam/dict.{type Dict}
 import gleam/dynamic
 import gleam/dynamic/decode
 import gleam/http/request
+import gleam/javascript/array
 import gleam/json
 import gleam/list
 import gleam/option.{None, Some}
@@ -122,12 +123,12 @@ pub fn dict(dict, values) {
   json.dict(dict, fn(x) { x }, values)
 }
 
-@external(erlang, "oas_utils_ffi", "merge")
 @external(javascript, "./ffi.mjs", "merge")
-fn do_merge(items: List(json.Json)) -> json.Json
+fn do_merge(items: array.Array(json.Json)) -> json.Json
 
-pub fn merge(items) {
-  do_merge(items)
+@external(erlang, "oas_utils_ffi", "merge")
+pub fn merge(items: List(json.Json)) -> json.Json {
+  do_merge(array.from_list(items))
 }
 
 pub fn decode_additional(_except, _decoder, next) {

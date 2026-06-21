@@ -1,10 +1,14 @@
 -module(oas_utils_ffi).
 -export([merge/1]).
 
--spec merge(list(#{binary() => json:decode_value()})) -> json:decode_value().
 merge(JsonList) ->
+    Map =
     lists:foldl(
-        fun(Json, Acc) -> maps:merge(Json, Acc) end,
+        fun(Json , Acc)->
+            A = gleam_json_ffi:json_to_string(Json),
+            maps:merge(json:decode(A), Acc)
+        end,
         #{},
         JsonList
-    ).
+    ),
+    json:encode(Map).
